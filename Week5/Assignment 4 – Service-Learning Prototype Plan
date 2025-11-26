@@ -1,0 +1,54 @@
+Community Food Pantry Inventory Tracker 
+Prototype Goal
+The goal of this prototype is to help a local community food pantry keep track of the items they have in stock. Many pantries use paper lists or guesswork, so this program makes it easier for volunteers to see what food is available, what has been donated, and what needs to be restocked.
+This supports the Service-Learning purpose because it helps the pantry stay organized and serve the community better. By keeping an accurate inventory, the pantry can make sure families get what they need and avoid running out of important items.
+Functions List 
+1. add_item(item, quantity)
+Inputs: item name, amount to add
+
+
+Output: updated total amount
+
+
+What it does: Adds a new item or increases the amount of an item already in the inventory.
+
+
+2. remove_item(item, quantity)
+Inputs: item name, amount to remove
+
+
+Output: updated amount or removal of item
+
+
+What it does: Removes a certain amount of an item. If the amount hits zero, the item is taken out of the inventory.
+
+
+3. view_inventory()
+Inputs: none
+
+
+Output: list of items and their amounts
+
+
+What it does: Shows everything currently in the inventory.
+
+
+4. menu()
+Inputs: none
+
+
+Output: lets the user pick what to do
+
+
+What it does: Shows the main options (add, remove, view, exit) and runs the right function.
+
+
+Extra Function 
+5. low_stock_alert(threshold)
+Inputs: minimum amount
+
+
+Output: list of items that are low
+
+
+What it does: Checks for items that are running low and warns the user.
