@@ -1,0 +1,60 @@
+# Community Food Pantry Inventory Tracker
+# This program helps manage an iventory for a food pantry.
+#Author: Brylan Williamson
+print("Welcome to the Community Food Pantry Inventory Tracker!")
+# Start with an empty inventory
+inventory = {}
+
+# Loop until the user chooses to exit
+while True:
+    print("\n--- Community Food Pantry Inventory Tracker ---")
+    print("1. Add Item")
+    print("2. Remove Item")
+    print("3. View Inventory")
+    print("4. Exit")
+
+    choice = input("Enter your choice (1-4): ")
+
+    # 1. Add Item
+    if choice == "1":
+        item = input("Enter item name: ")
+        quantity = int(input("Enter quantity to add: "))
+
+        if item in inventory:
+            inventory[item] = inventory[item] + quantity
+        else:
+            inventory[item] = quantity
+
+        print(item, "added. Total:", inventory[item])
+
+    # 2. Remove Item
+    elif choice == "2":
+        item = input("Enter item name to remove: ")
+
+        if item in inventory:
+            quantity = int(input("Enter quantity to remove: "))
+            inventory[item] = inventory[item] - quantity
+
+            if inventory[item] <= 0:
+                del inventory[item]
+                print(item, "removed from inventory.")
+            else:
+                print(item, "now has", inventory[item], "left.")
+        else:
+            print("Item not found.")
+
+    # 3. View Inventory
+    elif choice == "3":
+        print("\nCurrent Inventory:")
+        for item in inventory:
+            print(item, ":", inventory[item])
+        #shows all items and their quantities
+
+    # 4. Exit
+    elif choice == "4":
+        print("Exiting program. Goodbye!")
+        break
+
+    # Invalid Option
+    else:
+        print("Invalid choice. Please try again.")
