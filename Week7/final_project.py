@@ -66,8 +66,13 @@ def display_menu():
     print("\n--- Community Food Pantry Inventory Tracker ---")
     print("1. Add Item")
     print("2. Remove Item")
-    print("3. View Inventory")
-    print("4. Exit")
+    print("3. View Inventory (Simple List)")
+    print("4. View Inventory (Table Format)")
+    print("5. View Inventory by Category")
+    print("6. Search for an Item")
+    print("7. View Sorted by Quantity (Highest First)")
+    print("8. Export Inventory Report")
+    print("9. Exit")
 
 
 # -------------------------------------------------------------
@@ -82,7 +87,6 @@ def add_item():
         print("Item name cannot be empty.")
         return
 
-    # Get quantity
     try:
         quantity = int(input("Enter quantity to add: "))
         if quantity <= 0:
@@ -92,12 +96,10 @@ def add_item():
         print("Invalid number. Please enter a valid quantity.")
         return
 
-    # Display category options
     print("\nCategories:")
     for i, cat in enumerate(CATEGORIES, start=1):
         print(f"{i}. {cat}")
 
-    # Choose category
     try:
         choice = int(input("Choose a category (number): "))
         if choice < 1 or choice > len(CATEGORIES):
@@ -108,7 +110,6 @@ def add_item():
         print("Invalid input. Must be a number.")
         return
 
-    # Update inventory
     if item in inventory:
         inventory[item]["qty"] += quantity
     else:
@@ -128,7 +129,6 @@ def remove_item():
         print("Item not found in inventory.")
         return
 
-    # Remove quantity
     try:
         quantity = int(input("Enter quantity to remove: "))
         if quantity <= 0:
@@ -140,7 +140,6 @@ def remove_item():
 
     inventory[item]["qty"] -= quantity
 
-    # Remove item completely when qty reaches 0
     if inventory[item]["qty"] <= 0:
         del inventory[item]
         print(f"{item} has been removed completely from inventory.")
@@ -161,6 +160,95 @@ def view_inventory():
 
 
 # -------------------------------------------------------------
+# NEW Helper Functions
+# -------------------------------------------------------------
+def view_inventory_table():
+    """Display inventory in a formatted table."""
+    print("\n--- Inventory Table ---")
+
+    if not inventory:
+        print("Inventory is empty.")
+        return
+
+    print(f"{'Item':<20} {'Qty':<10} {'Category'}")
+    print("-" * 45)
+
+    for item, info in inventory.items():
+        print(f"{item:<20} {info['qty']:<10} {info['category']}")
+
+
+def view_by_category():
+    """Display inventory grouped by category."""
+    print("\n--- Inventory by Category ---")
+
+    if not inventory:
+        print("Inventory is empty.")
+        return
+
+    grouped = {cat: [] for cat in CATEGORIES}
+
+    for item, info in inventory.items():
+        grouped[info["category"]].append((item, info["qty"]))
+
+    for cat, items in grouped.items():
+        print(f"\n[{cat}]")
+        if not items:
+            print("  (No items)")
+        else:
+            for item, qty in items:
+                print(f"  {item:<20} Qty: {qty}")
+
+
+def search_item():
+    """Search for items containing a keyword."""
+    print("\n--- Search Item ---")
+    query = input("Enter item name to search: ").strip().title()
+
+    matches = [i for i in inventory if query in i]
+
+    if not matches:
+        print("No matching items found.")
+        return
+
+    print("\nMatches:")
+    for item in matches:
+        info = inventory[item]
+        print(f"{item} - Qty: {info['qty']} | Category: {info['category']}")
+
+
+def view_sorted_by_quantity(descending=True):
+    """Display inventory sorted by quantity."""
+    print("\n--- Inventory Sorted by Quantity ---")
+
+    if not inventory:
+        print("Inventory is empty.")
+        return
+
+    sorted_items = sorted(
+        inventory.items(),
+        key=lambda x: x[1]["qty"],
+        reverse=descending
+    )
+
+    for item, info in sorted_items:
+        print(f"{item} - Qty: {info['qty']} | Category: {info['category']}")
+
+
+def export_report(filename="pantry_report.txt"):
+    """Export inventory to a formatted text file."""
+    with open(filename, "w") as report:
+        report.write("Community Pantry Inventory Report\n")
+        report.write("-" * 40 + "\n\n")
+
+        for item, info in inventory.items():
+            report.write(
+                f"{item}: {info['qty']} units (Category: {info['category']})\n"
+            )
+
+    print(f"Report exported to {filename}")
+
+
+# -------------------------------------------------------------
 # Main Program Loop
 # -------------------------------------------------------------
 def main():
@@ -169,7 +257,7 @@ def main():
 
     while True:
         display_menu()
-        choice = input("Enter your choice (1-4): ")
+        choice = input("Enter your choice (1-9): ")
 
         if choice == "1":
             add_item()
@@ -178,13 +266,23 @@ def main():
         elif choice == "3":
             view_inventory()
         elif choice == "4":
+            view_inventory_table()
+        elif choice == "5":
+            view_by_category()
+        elif choice == "6":
+            search_item()
+        elif choice == "7":
+            view_sorted_by_quantity()
+        elif choice == "8":
+            export_report()
+        elif choice == "9":
             print("Saving data...")
             save_inventory()
             print("Thank you for using the Food Pantry Tracker. Goodbye!")
             break
         else:
-            print("Invalid selection. Please choose 1–4.")
+            print("Invalid selection. Please choose 1–9.")
 
 
-# Run the main program
+# Run the program
 main()
